@@ -1,6 +1,8 @@
 const db = require('../db/queries')
 const bcrypt = require('bcryptjs');
+const e = require('express');
 const { validationResult } = require('express-validator');
+require('dotenv').config();
 
 exports.getSignup = (req, res) => {
     res.render('signup', { 
@@ -48,3 +50,31 @@ exports.postSignup = async (req, res) => {
     }
 
 };
+
+const CLUB_PASSCODE = process.env.CLUB_PASSCODE;
+
+exports.getJoinClub = (rew, res) => {
+    res.render('join-club', {
+        error: null
+    })
+}
+
+exports.postJoinClub = async (req, res) => {
+    const { passcode } = req.body;
+
+    try {
+        if (passcode !== CLUB_PASSCODE) {
+            return res.render('join-club', {
+                error: "Incorrect passcode. Please try again!"
+            });
+        }
+
+        await db.updateMembershipStatus(req.user.id);
+        redirect('/');
+    } catch (error) {
+        console.log('Join club error:', error);
+        res.render('join-club', {
+            error: "An error occured. Please try again."
+        })
+    }
+}

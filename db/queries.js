@@ -1,3 +1,4 @@
+const { use } = require('passport');
 const pool = require('./pool');
 
 exports.createUser = async (firstName, lastName, email, password) => {
@@ -22,6 +23,18 @@ exports.findUserByEmail = async (email) => {
         return result.rows[0];
     } catch(error) {
         console.log("Error checking email:", error);
+        throw error;
+    }
+}
+
+exports.updateMembershipStatus = async (userId) => {
+    try {
+        await pool.query(
+            "UPDATE users SET is_member = true WHERE id = $1",
+            [userId]
+        );
+    } catch (error) {
+        console.log("Error updating membership status:", error);
         throw error;
     }
 }
