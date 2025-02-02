@@ -7,6 +7,15 @@
 </head>
 <body>
     <h1><%= title %></h1>
+
+    <% if (errors && errors.length > 0) { %>
+        <div class="errors">
+            <% errors.forEach(error => { %>
+                <p style="color: red;"><%= error.msg %> </p>
+            <% }); %>
+        </div>
+    <% } %>
+
     <form action="/signup" method="POST">
         <div>
             <label for="firstName">First Name:</label>

@@ -12,3 +12,16 @@ exports.createUser = async (firstName, lastName, email, password) => {
     }
     
 }
+
+exports.findUserByEmail = async (email) => {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM users WHERE email = $1",
+            [email]
+        );
+        return result.rows[0];
+    } catch(error) {
+        console.log("Error checking email:", error);
+        throw error;
+    }
+}

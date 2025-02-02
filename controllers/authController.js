@@ -1,21 +1,36 @@
 const db = require('../db/queries')
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 
 exports.getSignup = (req, res) => {
-    res.render('signup', { title: "sign up"});
+    res.render('signup', { 
+        title: "sign up",
+        errors: [],
+        oldInput: {
+            firstName: '',
+            lastName: '',
+            email: ''
+        }
+    });
 }
 
 exports.postSignup = async (req, res) => {
-    try {
-        const { firstName, lastName, email, password, confirmPassword } = req.body;
-        if (password !== confirmPassword) {
-            return res.status(400).render('signup', {
-                title: "sign up",
-                error: "Passwords donot match"
-                
-            });
-        }
+    const errors = validationResult(req);
+    const { firstName, lastName, email, password } = req.body;
 
+    if(!errors.isEmpty()) {
+        return res.status(400).render('signup', {
+            title: "sign up",
+            errors: errors.array(),
+            oldInput: {
+                firstName,
+                lastName,
+                email
+            }
+        })
+    }
+
+    try {
         const hashedPassword = await bcrypt.hash(password, 10);
         await db.createUser(firstName, lastName, email, hashedPassword);
         res.redirect('/login');
@@ -23,7 +38,13 @@ exports.postSignup = async (req, res) => {
         console.log('Signup error:', error);
         res.render('signup', {
             title: "sign up",
-            error: "Error creating account"
+            errors: [{ msg: "Error creating an account"}],
+            oldInput: {
+                firstName,
+                lastName,
+                email
+            }
         });
     }
+
 };
