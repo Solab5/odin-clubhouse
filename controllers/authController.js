@@ -2,6 +2,7 @@ const db = require('../db/queries')
 const bcrypt = require('bcryptjs');
 const e = require('express');
 const { validationResult } = require('express-validator');
+const passport = require('passport');
 require('dotenv').config();
 
 exports.getSignup = (req, res) => {
@@ -53,8 +54,9 @@ exports.postSignup = async (req, res) => {
 
 const CLUB_PASSCODE = process.env.CLUB_PASSCODE;
 
-exports.getJoinClub = (rew, res) => {
+exports.getJoinClub = (req, res) => {
     res.render('join-club', {
+        title: "Join secret club",
         error: null
     })
 }
@@ -65,16 +67,40 @@ exports.postJoinClub = async (req, res) => {
     try {
         if (passcode !== CLUB_PASSCODE) {
             return res.render('join-club', {
+                title: "Join secret club",
                 error: "Incorrect passcode. Please try again!"
             });
         }
 
         await db.updateMembershipStatus(req.user.id);
-        redirect('/');
+        res.redirect('/');
     } catch (error) {
         console.log('Join club error:', error);
         res.render('join-club', {
+            title: "Join secret club",
             error: "An error occured. Please try again."
         })
     }
+}
+
+exports.getLogin = (req, res) => {
+    res.render('login', {
+        title: "log in",
+        error: req.flash('error')
+    });
+}
+
+exports.postLogin = passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+});
+
+exports.logout = (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('/')
+    });
 }

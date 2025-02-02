@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the secret club </h1>
+    
+    <% if (user) { %>
+        <p>Welcome, <%= user.first_name %>!</p>
+        
+        <% if (!user.is_member) { %>
+            <p>Want to see all messages? <a href="/join-club">Join the Club</a></p>
+        <% } else { %>
+            <a href="/messages/create">Create New Message</a>
+        <% } %>
+        
+        <a href="/logout">Logout</a>
+    <% } else { %>
+        <p>Please <a href="/login">login</a> or <a href="/signup">sign up</a></p>
+    <% } %>
+
+</body>
+</html>

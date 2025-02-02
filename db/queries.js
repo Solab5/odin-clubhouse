@@ -38,3 +38,28 @@ exports.updateMembershipStatus = async (userId) => {
         throw error;
     }
 }
+
+exports.findUserById = async (id) => {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM users WHERE id = $1",
+            [id]
+        );
+        return result.rows[0];
+    } catch(error) {
+        console.log("Error finding user:", error);
+        throw error;
+    }
+}
+
+exports.createMessage = async (title, content, authorId) => {
+    try {
+        await pool.query(
+            "INSERT INTO messages (title, content, author_id) VALUES ($1, $2, $3)",
+            [title, content, authorId]
+        );   
+    } catch (error) {
+        console.log("Error creating message:", error);
+        throw error;
+    }
+}
