@@ -11,7 +11,7 @@ authRouter.get('/', (req, res) => {
     })
 })
 
-authRouter.get('/signup', isAuth, authController.getSignup);
+authRouter.get('/signup',  authController.getSignup);
 authRouter.post('/signup', isAuth, validateUser, authController.postSignup);
 
 authRouter.get('/join-club', authController.getJoinClub);
