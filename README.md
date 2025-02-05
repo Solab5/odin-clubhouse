@@ -32,9 +32,11 @@ npm install
 
 3. Create a `.env` file in the root directory with:
 
+```
 SESSION_SECRET=your_session_secret
 CLUB_PASSCODE=your_club_passcode
 DATABASE_URL=your_postgres_connection_string
+```
 
 4. Set up the database:
 ```
