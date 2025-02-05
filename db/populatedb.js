@@ -27,7 +27,11 @@ async function main() {
     console.log("seeding...");
     const client = new Client({
       connectionString: process.env.DATABASE_URL,
-      // connectionString: "postgresql://rtv-lpt-127:rtv-lpt-127@localhost:5432/grocery_db",
+      // connectionString: "postgres://koyebdb",
+      ssl: {
+        rejectUnauthorized: false,  // Important for Koyeb's SSL setup
+        sslmode: 'require'
+      }
     });
     await client.connect();
     await client.query(SQL);
