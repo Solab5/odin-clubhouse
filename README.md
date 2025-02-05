@@ -37,7 +37,7 @@ CLUB_PASSCODE=your_club_passcode
 DATABASE_URL=your_postgres_connection_string
 
 4. Set up the database:
-
+```
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100),
@@ -55,6 +55,7 @@ CREATE TABLE messages (
     user_id INTEGER REFERENCES users(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 5. Start the server:
 
