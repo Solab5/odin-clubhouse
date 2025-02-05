@@ -5,5 +5,6 @@ const messageRouter = Router();
 
 messageRouter.get('/create', isAuth, messageController.getCreateMessage);
 messageRouter.post('/create', isAuth, messageController.postCreateMessage);
+messageRouter.post('/delete/:id', isAuth, messageController.deleteMessage);
 
 module.exports = messageRouter;

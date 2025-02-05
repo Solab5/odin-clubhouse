@@ -4,15 +4,10 @@ const { validateUser } = require('../middleware/validateUser');
 const authRouter = Router();
 const { isAuth } = require('../middleware/auth');
 
-authRouter.get('/', (req, res) => {
-    res.render('index', {
-        title: "Home",
-        user: req.user
-    })
-})
+authRouter.get('/', isAuth, authController.getHome)
 
 authRouter.get('/signup',  authController.getSignup);
-authRouter.post('/signup', isAuth, validateUser, authController.postSignup);
+authRouter.post('/signup', validateUser, authController.postSignup);
 
 authRouter.get('/join-club', authController.getJoinClub);
 authRouter.post('/join-club', authController.postJoinClub);

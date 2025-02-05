@@ -21,3 +21,16 @@ exports.postCreateMessage = async (req, res) => {
         })
     }
 }
+
+exports.deleteMessage = async (req, res) => {
+    try {
+        if (!req.user.is_admin) {
+            return res.status(403).send('Unauthorized');
+        }
+        await db.deleteMessage(req.params.id);
+        res.redirect('/');
+    } catch (error) {
+        console.log('Message deletion error:', error);
+        res.status(500).send('Error deleting message');
+    }
+}

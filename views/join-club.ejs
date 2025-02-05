@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <h1>Join the Secret Club </h1>
+    <div class="container">
+        <h1>Join the Secret Club</h1>
 
-    <% if (error) { %>
-        <div class="error">
-            <p style="color: red;"><%= error %></p>
+        <% if (error) { %>
+            <div class="error">
+                <p><%= error %></p>
+            </div>
+        <% } %>
+
+        <form action="/join-club" method="POST">
+            <div class="form-group">
+                <label for="passcode">Enter Secret Passcode:</label>
+                <input type="password" name="passcode" id="passcode" required>
+            </div>
+
+            <button type="submit">Join Club</button>
+        </form>
+
+        <div class="nav-links" style="text-align: center; margin-top: 20px;">
+            <a href="/">Back to Home</a>
         </div>
-    <% } %>
-
-    <form action="/join-club" method="POST">
-        <div>
-            <label for="passcode">Enter Secret Passcode:</label>
-            <input type="password" name="passcode" id="passcode">
-        </div>
-
-        <button type="submit">Join Club</button>
-    </form>
+    </div>
 </body>
 </html>

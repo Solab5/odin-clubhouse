@@ -1,6 +1,5 @@
 const db = require('../db/queries')
 const bcrypt = require('bcryptjs');
-const e = require('express');
 const { validationResult } = require('express-validator');
 const passport = require('passport');
 require('dotenv').config();
@@ -19,7 +18,7 @@ exports.getSignup = (req, res) => {
 
 exports.postSignup = async (req, res) => {
     const errors = validationResult(req);
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, isAdmin } = req.body;
 
     if(!errors.isEmpty()) {
         return res.status(400).render('signup', {
@@ -35,7 +34,7 @@ exports.postSignup = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await db.createUser(firstName, lastName, email, hashedPassword);
+        await db.createUser(firstName, lastName, email, hashedPassword, isAdmin === 'on');
         res.redirect('/login');
     } catch (error) {
         console.log('Signup error:', error);
@@ -49,7 +48,6 @@ exports.postSignup = async (req, res) => {
             }
         });
     }
-
 };
 
 const CLUB_PASSCODE = process.env.CLUB_PASSCODE;
@@ -104,3 +102,21 @@ exports.logout = (req, res, next) => {
         res.redirect('/')
     });
 }
+
+exports.getHome = async (req, res) => {
+    try {
+        const messages = await db.getAllMessages();
+        res.render('index', {
+            title: "Home",
+            user: req.user,
+            messages: messages
+        });
+    } catch (error) {
+        console.log('Error fetching messages:', error);
+        res.render('index', {
+            title: "Home",
+            user: req.user,
+            messages: []
+        });
+    }
+};

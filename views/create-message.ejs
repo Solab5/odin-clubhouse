@@ -4,30 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <h1> <%= title %></h1>
+    <div class="container">
+        <h1>Create New Message</h1>
 
-    <% if (errors && errors.length > 0) { %>
-        <div class="errors">
-            <% errors.forEach(error => { %>
-                <p style="color: red;"><%= error.msg  %> </p>
-            <% }) %>
-        </div>
-    <% } %>
-    
-    <form action="/messages/create" method="POST">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title">
-        </div>
+        <% if (errors && errors.length > 0) { %>
+            <div class="error">
+                <% errors.forEach(error => { %>
+                    <p><%= error.msg %></p>
+                <% }) %>
+            </div>
+        <% } %>
+        
+        <form action="/messages/create" method="POST">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" required>
+            </div>
 
-        <div>
-            <label for="content">Content:</label>
-            <textarea name="content" id="content" required></textarea>
-        </div>
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea name="content" id="content" required 
+                    style="min-height: 150px; resize: vertical;"></textarea>
+            </div>
 
-        <button type="submit">Create Message</button>
-    </form>
+            <button type="submit">Create Message</button>
+        </form>
+
+        <div class="nav-links" style="text-align: center; margin-top: 20px;">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
 </body>
 </html>

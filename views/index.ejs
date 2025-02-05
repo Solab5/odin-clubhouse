@@ -4,23 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <h1>Welcome to the secret club </h1>
-    
-    <% if (user) { %>
-        <p>Welcome, <%= user.first_name %>!</p>
+    <div class="container">
+        <h1>Welcome to the Secret Club</h1>
         
-        <% if (!user.is_member) { %>
-            <p>Want to see all messages? <a href="/join-club">Join the Club</a></p>
-        <% } else { %>
-            <a href="/messages/create">Create New Message</a>
-        <% } %>
-        
-        <a href="/logout">Logout</a>
-    <% } else { %>
-        <p>Please <a href="/login">login</a> or <a href="/signup">sign up</a></p>
-    <% } %>
+        <div class="nav-links">
+            <% if (user) { %>
+                <span>Welcome, <%= user.first_name %>!</span>
+                <% if (!user.is_member) { %>
+                    <a href="/join-club">Join the Club</a>
+                <% } else { %>
+                    <a href="/messages/create">Create New Message</a>
+                <% } %>
+                <a href="/logout">Logout</a>
+            <% } else { %>
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            <% } %>
+        </div>
 
+        <div class="messages">
+            <h2>Club Messages</h2>
+            <% if (messages && messages.length > 0) { %>
+                <% messages.forEach(message => { %>
+                    <div class="message">
+                        <h3><%= message.title %></h3>
+                        <p><%= message.content %></p>
+                        
+                        <% if (user && user.is_member) { %>
+                            <p class="message-meta">
+                                Posted by <%= message.first_name %> <%= message.last_name %> 
+                                on <%= message.formatted_date %>
+                            </p>
+                        <% } %>
+
+                        <% if (user && user.is_admin) { %>
+                            <form action="/messages/delete/<%= message.id %>" method="POST">
+                                <button type="submit" class="delete-btn" 
+                                        onclick="return confirm('Are you sure you want to delete this message?')">
+                                    Delete Message
+                                </button>
+                            </form>
+                        <% } %>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p class="no-messages">No messages yet!</p>
+            <% } %>
+        </div>
+    </div>
 </body>
 </html>
